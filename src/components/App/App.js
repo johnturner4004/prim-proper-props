@@ -1,23 +1,31 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-import Header from '../Header/Header'
-import Footer from '../Footer/Footer'
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
+import GuestList from '../GuestList/GuestList';
 
 function App() {
+  console.log('in App');
+  
   let [guestList, setGuestList] = useState([]);
   let [newGuestName, setNewGuestName] = useState('');
   let [newGuestMeal, setNewGuestMeal] = useState('false');
 
   //On load, get guests
   useEffect(() => {
+    console.log('in useEffect');    
     getGuests()
   }, [])
 
   const getGuests = () => {
+    console.log('in getGuests');
+    
     axios.get('/guests')
       .then(response => {
         setGuestList(response.data)
+        console.log(response.data);
+        
       })
       .catch(err => {
         alert('error getting guests');
@@ -100,23 +108,7 @@ function App() {
         </div>
         <button type="submit">Add Guest</button>
       </form>
-      <h2>Guest List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Kid's Meal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {guestList.map(guest => (
-            <tr key={guest.id}>
-              <td>{guest.name}</td>
-              <td>{String(guest.kidsMeal)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <GuestList guestList={guestList}/>
       <h2>Dinner Supplies</h2>
       <div>
         Spoons: {guestList.length * 2}
